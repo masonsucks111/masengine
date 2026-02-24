@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Engine Sound Simulator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Engine Sound Simulator</h1>
+      <p class="hint">
+        W/S = throttle, A/D = shift, Space = start/stop audio
+      </p>
+    </header>
+
+    <main class="grid">
+      <section class="panel">
+        <div class="row">
+          <label>
+            Engine
+            <select id="engineSelect">
+              <option value="i4">Inline-4</option>
+              <option value="i6">Inline-6</option>
+              <option value="v8" selected>V8</option>
+              <option value="v10">V10</option>
+              <option value="v12">V12</option>
+              <option value="v16">V16</option>
+            </select>
+          </label>
+
+          <label>
+            Redline (RPM)
+            <input id="redline" type="number" min="4500" max="11000" step="100" value="6800" />
+          </label>
+        </div>
+
+        <div class="row">
+          <div class="meter">
+            <div class="meterLabel">Throttle</div>
+            <div class="bar"><div id="throttleBar" class="fill"></div></div>
+            <div id="throttleText" class="meterText">0%</div>
+          </div>
+
+          <div class="meter">
+            <div class="meterLabel">RPM</div>
+            <div class="bar"><div id="rpmBar" class="fill"></div></div>
+            <div id="rpmText" class="meterText">0</div>
+          </div>
+
+          <div class="meter">
+            <div class="meterLabel">Gear</div>
+            <div class="gearReadout" id="gearText">N</div>
+          </div>
+        </div>
+
+        <div class="row buttons">
+          <button id="startBtn">Start Audio (Space)</button>
+          <button id="neutralBtn">Neutral</button>
+          <button id="resetBtn">Reset</button>
+        </div>
+
+        <details class="samples">
+          <summary>Optional: load real samples (idle / accel / high)</summary>
+          <p class="small">
+            If you load your own recordings (royalty-free/your own), the sim will crossfade them based on RPM and throttle.
+            Otherwise it uses synthesis.
+          </p>
+          <div class="row">
+            <label>Idle sample <input id="idleFile" type="file" accept="audio/*"/></label>
+            <label>Accel sample <input id="accelFile" type="file" accept="audio/*"/></label>
+            <label>High sample <input id="highFile" type="file" accept="audio/*"/></label>
+          </div>
+          <div class="row">
+            <label class="checkbox">
+              <input id="useSamples" type="checkbox" />
+              Use samples (if loaded)
+            </label>
+          </div>
+        </details>
+      </section>
+
+      <section class="panel">
+        <div class="engineCard">
+          <div id="engineSvgWrap" class="engineSvg"></div>
+          <div class="engineInfo">
+            <div class="kvs">
+              <div><span class="k">Layout:</span> <span id="layoutText">V</span></div>
+              <div><span class="k">Cylinders:</span> <span id="cylText">8</span></div>
+              <div><span class="k">Firing feel:</span> <span id="feelText">Burble / punchy</span></div>
+            </div>
+            <p class="small">
+              This is a physics-inspired synth: intake “air hiss”, combustion pulses, exhaust resonance, and gear/load behavior.
+              For truly accurate “real engine” tone, use your own samples.
+            </p>
+          </div>
+        </div>
+
+        <canvas id="scope" width="900" height="240"></canvas>
+        <p class="small muted">Oscilloscope view (approx). Not a perfect waveform analyzer, but useful for tuning.</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="small muted">Tip: click the page once, then press Space to start audio (browser audio policy).</div>
+    </footer>
+  </div>
+
+  <script src="sim.js"></script>
+</body>
+</html>
